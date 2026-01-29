@@ -1,0 +1,42 @@
+/* Animations for a "Perfectly Designed" feel */
+.animate-slide-right {
+  animation: slideRight 0.3s ease-out;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.2s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.15s ease-in-out;
+}
+
+@keyframes slideRight {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Scrollbar styling for Sidebar */
+aside .flex-1::-webkit-scrollbar {
+  width: 4px;
+}
+
+aside .flex-1::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+/* Ensure the top bar is always centered */
+header {
+  margin: 0 auto;
+}

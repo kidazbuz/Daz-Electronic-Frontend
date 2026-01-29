@@ -1,0 +1,26 @@
+.recommendations-carousel {
+    .p-carousel-content {
+        padding: 0;
+    }
+    .p-carousel-indicators {
+        padding: 1rem 0;
+        .p-carousel-indicator.p-highlight button {
+            background-color: #0f172a;
+            width: 1.5rem;
+            border-radius: 10px;
+        }
+    }
+    .p-carousel-prev, .p-carousel-next {
+        background: white;
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        &:hover { background: #f8fafc; }
+    }
+}
+
+.dark .recommendations-carousel {
+    .p-carousel-prev, .p-carousel-next {
+        background: #1e293b;
+        color: white;
+        &:hover { background: #334155; }
+    }
+}

@@ -1,0 +1,203 @@
+@use 'mixins' as *;
+
+.layout-topbar {
+    position: fixed;
+    height: 4rem;
+    z-index: 997;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 0 2rem;
+    background-color: var(--surface-card);
+    transition: left var(--layout-section-transition-duration);
+    display: flex;
+    align-items: center;
+
+    .layout-topbar-logo-container {
+        width: 20rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .layout-topbar-logo {
+        display: inline-flex;
+        align-items: center;
+        font-size: 1.5rem;
+        border-radius: var(--content-border-radius);
+        color: var(--text-color);
+        font-weight: 500;
+        gap: 0.5rem;
+
+        svg {
+            width: 3rem;
+        }
+
+        &:focus-visible {
+            @include focused();
+        }
+    }
+
+    .layout-topbar-action {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--text-color-secondary);
+        border-radius: 50%;
+        width: 2.5rem;
+        height: 2.5rem;
+        color: var(--text-color);
+        transition: background-color var(--element-transition-duration);
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--surface-hover);
+        }
+
+        &:focus-visible {
+            @include focused();
+        }
+
+        i {
+            font-size: 1.25rem;
+        }
+
+        span {
+            font-size: 1rem;
+            display: none;
+        }
+
+        &.layout-topbar-action-highlight {
+            background-color: var(--primary-color);
+            color: var(--primary-contrast-color);
+        }
+    }
+
+    .layout-topbar-search {
+        display: flex;
+        align-items: center;
+        /* Force background to follow theme switch */
+        background-color: var(--surface-ground) !important;
+        border: 1px solid var(--surface-border);
+        border-radius: var(--content-border-radius);
+        padding: 5px 12px;
+        margin-left: 1.5rem;
+        width: 100%;
+        max-width: 400px;
+        /* Ensures the background/border fades smoothly during theme switch */
+        transition: all var(--layout-section-transition-duration);
+
+        i {
+            color: var(--text-color-secondary);
+            margin-right: 8px;
+        }
+
+        input {
+            background: transparent !important;
+            border: none;
+            /* Force typing text to flip between dark and light colors */
+            color: var(--text-color) !important;
+            width: 100%;
+            outline: 0 none;
+            font-family: inherit;
+            /* Ensure the blinking cursor is visible in both themes */
+            caret-color: var(--primary-color);
+
+            &::placeholder {
+                /* Force placeholder text to be legible in both themes */
+                color: var(--text-color-secondary) !important;
+                opacity: 0.6;
+            }
+        }
+
+        &:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 1px var(--primary-color);
+        }
+    }
+
+    .layout-menu-button {
+        margin-right: 0.5rem;
+    }
+
+    .layout-topbar-menu-button {
+        display: none;
+    }
+
+    .layout-topbar-actions {
+        margin-left: auto;
+        display: flex;
+        gap: 1rem;
+    }
+
+    .layout-topbar-menu-content {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .layout-config-menu {
+        display: flex;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 991px) {
+    .layout-topbar {
+        padding: 0 2rem;
+
+        .layout-topbar-logo-container {
+            width: auto;
+        }
+
+        .layout-menu-button {
+            margin-left: 0;
+            margin-right: 0.5rem;
+        }
+
+        .layout-topbar-menu-button {
+            display: inline-flex;
+        }
+
+        .layout-topbar-menu {
+            position: absolute;
+            background-color: var(--surface-overlay);
+            transform-origin: top;
+            box-shadow:
+                0px 3px 5px rgba(0, 0, 0, 0.02),
+                0px 0px 2px rgba(0, 0, 0, 0.05),
+                0px 1px 4px rgba(0, 0, 0, 0.08);
+            border-radius: var(--content-border-radius);
+            padding: 1rem;
+            right: 2rem;
+            top: 4rem;
+            min-width: 15rem;
+            border: 1px solid var(--surface-border);
+
+            .layout-topbar-menu-content {
+                gap: 0.5rem;
+            }
+
+            .layout-topbar-action {
+                display: flex;
+                width: 100%;
+                height: auto;
+                justify-content: flex-start;
+                border-radius: var(--content-border-radius);
+                padding: 0.5rem 1rem;
+
+                i {
+                    font-size: 1rem;
+                    margin-right: 0.5rem;
+                }
+
+                span {
+                    font-weight: medium;
+                    display: block;
+                }
+            }
+        }
+
+        .layout-topbar-menu-content {
+            flex-direction: column;
+        }
+    }
+}

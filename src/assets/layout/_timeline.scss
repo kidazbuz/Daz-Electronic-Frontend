@@ -1,0 +1,151 @@
+// --- 1. Animations ---
+@keyframes pulse-green {
+    0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); } // Using RGBA for smoother glow
+    70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+@keyframes sk-bounce {
+    0%, 100% { transform: scale(0.0); }
+    50% { transform: scale(1.0); }
+}
+
+// --- 2. PrimeNG Timeline Overrides (Theme Aware) ---
+::ng-deep {
+    .p-timeline-event-connector {
+        background-color: var(--surface-border) !important;
+        width: 2px !important; // Slightly thicker for visibility
+    }
+
+    .custom-marker {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--surface-200);
+        color: var(--text-color-secondary);
+        z-index: 2;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid transparent;
+
+        &.completed {
+            background-color: var(--green-500) !important; // Changed to green (standard for completion)
+            color: #ffffff;
+            border-color: var(--green-600);
+        }
+
+        &.active {
+            background-color: var(--surface-card);
+            border: 2px solid var(--primary-color); // Matches your brand primary
+            color: var(--primary-color);
+            animation: pulse-green 1.5s infinite;
+            transform: scale(1.1);
+            font-weight: bold;
+        }
+    }
+
+    .timeline-label {
+        font-size: 0.95rem;
+        color: var(--text-color-secondary);
+        padding: 0.5rem;
+
+        &.active-text {
+            font-weight: 800;
+            color: var(--text-color);
+            transform: translateY(-2px);
+        }
+    }
+}
+
+// --- 3. Premium Search Bar (Theme Aware) ---
+.search-container {
+    transition: all 0.3s ease;
+    &.is-loading {
+        opacity: 0.7;
+        pointer-events: none;
+    }
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background: var(--surface-card);
+    border-radius: 50px;
+    padding: 6px 6px 6px 25px; // Tighter padding for a sleek look
+    border: 1px solid var(--surface-border);
+    transition: all 0.3s shadow;
+
+    &:focus-within {
+        border-color: var(--primary-color);
+        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3) !important;
+    }
+}
+
+.search-input {
+    flex: 1;
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    color: var(--text-color) !important;
+    font-size: 1.05rem;
+    font-weight: 500;
+
+    &::placeholder {
+        color: var(--text-color-secondary);
+        opacity: 0.5;
+    }
+}
+
+.search-button {
+    background: var(--primary-color);
+    color: var(--primary-color-text);
+    border: none;
+    border-radius: 40px;
+    padding: 12px 28px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+        transform: translateY(-1px);
+        filter: brightness(1.1);
+        box-shadow: 0 4px 12px var(--primary-color-focus);
+    }
+
+    &:disabled {
+        background: var(--surface-300);
+        opacity: 0.6;
+    }
+}
+
+// --- 4. Component Alerts & Loaders ---
+.alert-custom-danger {
+    background-color: var(--red-100);
+    border: 1px solid var(--red-300);
+    color: var(--red-900);
+    border-radius: 16px; // More modern rounded corners
+
+    // Dark mode logic using PrimeNG variable check
+    .dark & {
+        background-color: rgba(239, 68, 68, 0.1);
+        border-color: var(--red-800);
+        color: var(--red-400);
+    }
+}
+
+// --- 5. Global Card Theme Fix ---
+.card.surface-adaptive {
+    background-color: var(--surface-card) !important;
+    color: var(--text-color);
+    border: 1px solid var(--surface-border);
+    border-radius: 24px !important; // Premium rounded look
+}
+
+.letter-spacing-1 { letter-spacing: -0.8px; }
+
+@media (max-width: 576px) {
+    .search-box { padding: 4px 4px 4px 15px; }
+    .search-button { padding: 10px 15px; font-size: 0.85rem; }
+}

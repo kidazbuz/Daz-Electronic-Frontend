@@ -1,0 +1,43 @@
+import { Component, input } from '@angular/core';
+import { RippleModule } from 'primeng/ripple';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { CommonModule } from '@angular/common';
+import { IRecentSaleItem } from '../../../shared/interfaces/analytics';
+
+@Component({
+    standalone: true,
+    selector: 'app-recent-sales-widget',
+    imports: [CommonModule, TableModule, ButtonModule, RippleModule],
+    template: `<div class="card mb-8!">
+        <div class="font-semibold text-xl mb-4">Recent Sales</div>
+        <p-table [value]="sales()" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+            <ng-template #header>
+                <tr>
+                    <th>Image</th>
+                    <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
+                    <th>View</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-sale>
+                <tr>
+                    <td style="width: 15%; min-width: 5rem;">
+                        <img src="{{ sale.image }}" class="shadow-lg" alt="{{ sale.name }}" width="50" />
+                    </td>
+                    <td style="width: 35%; min-width: 7rem;">{{ sale?.name }}</td>
+                    <td style="width: 35%; min-width: 8rem;">{{ sale?.price | currency: 'TZS' }}</td>
+                    <td style="width: 15%;">
+                        <button pButton pRipple type="button" icon="pi pi-search" class="p-button p-component p-button-text p-button-icon-only"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>`,
+
+})
+export class RecentSalesWidget {
+
+    sales = input<IRecentSaleItem[]>([]);
+
+}
