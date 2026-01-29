@@ -1,10 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { Location } from '@angular/common'; //
+import { Location } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
 import { Copyright } from '../user-pages/copyright';
 import { Auth } from '../../shared/services/auth';
+
 
 
 @Component({

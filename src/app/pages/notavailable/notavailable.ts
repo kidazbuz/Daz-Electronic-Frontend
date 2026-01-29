@@ -1,9 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
+import { Location } from '@angular/common';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
 import { Copyright } from '../user-pages/copyright';
 import { Auth } from '../../shared/services/auth';
+
 
 @Component({
     selector: 'app-notavailable',
@@ -61,6 +63,7 @@ export class NotAvailable implements OnInit {
 
   private authService = inject(Auth);
   private router = inject(Router);
+  private location = inject(Location);
   isAuthenticated = signal<boolean>(false);
 
   ngOnInit(): void {
@@ -77,12 +80,16 @@ export class NotAvailable implements OnInit {
 
   }
 
-  redirectBack(){
-    if(this.authService.getAuthenticatedUser()){
-      return this.router.navigate(['/dashboard/main']);
-    }
+  redirectBack() {
 
-    return this.router.navigate(['/']);
+      const historyState = window.history.length;
+
+      if (historyState > 1) {
+          this.location.back();
+      } else {
+          const fallback = this.isAuthenticated() ? '/dashboard/main' : '/';
+          this.router.navigate([fallback]);
+      }
   }
 
 }
