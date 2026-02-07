@@ -199,7 +199,7 @@ import { ToastModule } from 'primeng/toast';
                                             </div>
 
                                             <p-button icon="pi pi-shopping-cart"
-                                                      [rounded]="true"  
+                                                      [rounded]="true"
                                                       (onClick)="$event.stopPropagation(); addToCart(item)">
                                             </p-button>
                                         </div>
@@ -218,9 +218,9 @@ import { ToastModule } from 'primeng/toast';
           position="left"
           [blockScroll]="true"
           [modal]="true"
-          [dismissible]="true"
+          [showCloseIcon]="false"
           appendTo="body"
-          styleClass="w-[280px] sm:w-[320px] !bg-white dark:!bg-slate-900 shadow-2xl !z-[9999]">
+          styleClass="w-[85vw] sm:w-[320px] !bg-white dark:!bg-slate-900 shadow-2xl !z-[9999]">
 
     <div class="flex justify-between items-center p-5 border-b border-slate-100 dark:border-slate-800">
         <h3 class="text-xl font-bold dark:text-white m-0">Filters</h3>
@@ -233,8 +233,10 @@ import { ToastModule } from 'primeng/toast';
         </p-button>
     </div>
 
-    <div class="p-5 h-[calc(100%-80px)] overflow-y-auto pb-20">
+    <div class="p-5 overflow-y-auto h-[calc(100vh-80px)]">
         <ng-container *ngTemplateOutlet="filterContent"></ng-container>
+
+        <div class="h-20 lg:hidden"></div>
     </div>
 </p-drawer>
 
@@ -369,7 +371,8 @@ export class Listing extends BaseProductList implements OnInit {
         return this.currentCategory ? this.currentCategory.replace(/-/g, ' ') : 'All Products';
     }
 
-    ngOnInit(): void {
+    override ngOnInit(): void {
+        super.ngOnInit();
         this.getProductFilters();
         this.route.url.subscribe(segments => {
             this.currentCategory = segments[0]?.path || null;

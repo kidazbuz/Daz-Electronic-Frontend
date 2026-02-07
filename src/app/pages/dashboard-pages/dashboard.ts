@@ -24,8 +24,24 @@ import { CustomerDashboard } from './components/customer_dashboard';
         </div>
       </div>
 
-        <div *ngIf="!isLoading()">
-          <div *appAllowedgroup="['Chief Executive Officer (CEO)', 'Sales Representative']" class="grid grid-cols-12 gap-8">
+      <div class="grid grid-cols-12 gap-8" *ngIf="dashboardData(); let data">
+            <app-stats-widget [stats] = "data.stats" class="contents" />
+            <div class="col-span-12 xl:col-span-6">
+              <app-recent-sales-widget [sales] = "data.recent_sales || []" />
+              <app-best-selling-widget [sellers] = "data.best_sellers" />
+            </div>
+            <div class="col-span-12 xl:col-span-6">
+              <app-revenue-stream-widget [revenue] = "data.revenue_stream" />
+              <app-expenses-widget [expenses] = "data.expense_stream" />
+            </div>
+
+            <div *appAllowedgroup="'Customer'">
+                  <app-customer-dashboard />
+            </div>
+        </div>
+
+        <div *ngIf="!isLoading()" class="grid grid-cols-12 gap-8">
+          <div *appAllowedgroup="['Chief Executive Officer (CEO)', 'Sales Representative']">
               <div *ngIf="dashboardData(); let data">
                 <app-stats-widget [stats] = "data.stats" class="contents" />
                 <div class="col-span-12 xl:col-span-6">
@@ -35,15 +51,12 @@ import { CustomerDashboard } from './components/customer_dashboard';
                 <div class="col-span-12 xl:col-span-6">
                     <app-revenue-stream-widget [revenue] = "data.revenue_stream" />
                     <app-expenses-widget [expenses] = "data.expense_stream" />
-                    <app-customer-dashboard />
                 </div>
             </div>
           </div>
 
           <div *appAllowedgroup="'Customer'">
-              <div>
                 <app-customer-dashboard />
-            </div>
           </div>
         </div>
 
@@ -65,9 +78,6 @@ import { CustomerDashboard } from './components/customer_dashboard';
           </div>
 
         </div>
-
-
-
 
 
     `

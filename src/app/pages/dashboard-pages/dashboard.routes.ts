@@ -19,6 +19,7 @@ import { Tracking } from '../welcome-pages/components/tracking';
 import { Carts } from './pages/carts';
 import { Expenses } from './pages/expenses';
 import { AgentSummary } from './pages/agent_summary';
+import { Test } from './test/test';
 
 
 export default [
@@ -50,6 +51,18 @@ export default [
     {
         path: 'categories',
         component: Categories,
+        canActivate: [authenticityGuard],
+        data: { allowedRoles: ['System Administrator', 'Chief Executive Officer (CEO)'] }
+    },
+    {
+        path: 'harware/test',
+        component: Test,
+        canActivate: [authenticityGuard],
+        data: { allowedRoles: ['System Administrator', 'Chief Executive Officer (CEO)'] }
+    },
+    {
+        path: 'test/summary',
+        component: Test,
         canActivate: [authenticityGuard],
         data: { allowedRoles: ['System Administrator', 'Chief Executive Officer (CEO)'] }
     },
@@ -113,7 +126,7 @@ export default [
         canActivate: [authenticityGuard],
         data: { allowedRoles: ['Chief Executive Officer (CEO)', 'Sales Representative', 'System Administrator', 'Manager'] }
     },
-    // // --- System Administrator Only ---
+    // --- System Administrator Only ---
     {
         path: 'admin/users',
         component: Users,

@@ -4,6 +4,7 @@ import { Listing } from './components/listing';
 import { Tracking } from './components/tracking';
 import { ProductDetails } from './product-details';
 import { Specific } from './components/specific';
+import { Soft } from './components/soft';
 import { ShoppingCart } from './components/shopping-cart';
 import { CheckOut } from './components/check-out';
 import { AboutUs } from './us-pages/about_us';
@@ -26,6 +27,7 @@ export default [
             { path: 'cart', component: ShoppingCart, data: { extraParameter: '' } },
             { path: 'tracking', component: Tracking, data: { extraParameter: '' } },
             { path: 'product/:id', component: Specific, data: { extraParameter: '' }},
+            { path: 'software/:id', component: Soft, data: { extraParameter: '' }},
             { path: 'checkout', component: CheckOut, data: { extraParameter: '' } },
             { path: 'about', component: AboutUs, data: { extraParameter: '' } },
             { path: 'contact', component: ContactUs, data: { extraParameter: '' } },

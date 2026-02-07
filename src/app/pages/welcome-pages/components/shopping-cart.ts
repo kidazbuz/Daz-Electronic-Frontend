@@ -245,7 +245,7 @@ import { IProductRecommendation } from '../../../shared/interfaces/product';
                           {{ cartService.total$ | async | currency: 'TZS ': 'symbol':'1.0-0' }}
                         </span>
                       </div>
-                      <button class="flex-1 bg-slate-900 dark:bg-slate-100 dark:text-slate-900 text-white py-3.5 rounded-xl font-black uppercase tracking-widest text-[11px]" (click)="redirectToNotAvailable()">
+                      <button (click)="redirectToNotAvailable()" class="flex-1 bg-slate-900 dark:bg-slate-100 dark:text-slate-900 text-white py-3.5 rounded-xl font-black uppercase tracking-widest text-[11px]">
                         Checkout
                       </button>
                     </div>
@@ -481,7 +481,7 @@ import { IProductRecommendation } from '../../../shared/interfaces/product';
                       {{ cartService.total$ | async | currency: 'TZS ': 'symbol':'1.0-0' }}
                     </span>
                   </div>
-                  <button class="flex-1 bg-slate-900 dark:bg-slate-100 dark:text-slate-900 text-white py-3.5 rounded-xl font-black uppercase tracking-widest text-[11px]" routerLink="/checkout">
+                  <button class="flex-1 bg-slate-900 dark:bg-slate-100 dark:text-slate-900 text-white py-3.5 rounded-xl font-black uppercase tracking-widest text-[11px]" (click)="redirectToNotAvailable()">
                     Checkout
                   </button>
                 </div>
@@ -644,6 +644,6 @@ export class ShoppingCart implements OnInit {
     return this.router.navigate(['/notavailable']);
   }
 
-  
+
 
 }

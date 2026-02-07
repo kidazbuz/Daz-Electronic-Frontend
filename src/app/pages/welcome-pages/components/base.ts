@@ -3,17 +3,18 @@ import {
     signal,
     inject,
     HostListener,
-    OnDestroy
+    OnDestroy,
+    OnInit
 } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
+import { finalize, throttleTime, fromEvent, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { finalize } from 'rxjs/operators';
 import { IProductSpecification, IPaginatedSpecificationList,  } from '../../../shared/interfaces/product';
 import { Slide, NavLink } from '../../../shared/interfaces/home';
 import { Master } from '../../../shared/services/master';
 
 @Directive()
-export abstract class BaseProductList implements OnDestroy {
+export abstract class BaseProductList implements OnInit, OnDestroy {
 
     public API_BASE_URL = "http://127.0.0.1:8000/api/";
 
@@ -31,6 +32,7 @@ export abstract class BaseProductList implements OnDestroy {
     protected loadedIds = new Set<number>();
     isLoading = signal(false);
     products: IProductSpecification[] = [];
+    private scrollSubscription?: Subscription;
 
     protected activeQueryParams: any = {};
 
@@ -58,11 +60,25 @@ export abstract class BaseProductList implements OnDestroy {
     ]);
     currentSlide = signal(0);
 
-    // --- LIFECYCLE & CLEANUP ---
+    ngOnInit(): void {
+        this.setupThrottledScroll(); // 5. Initialize the scroll listener
+    }
+
+    private setupThrottledScroll(): void {
+        this.scrollSubscription = fromEvent(window, 'scroll')
+            .pipe(
+                throttleTime(500, undefined, { leading: true, trailing: true })
+            )
+            .subscribe(() => {
+                this.onScroll();
+            });
+    }
+
     ngOnDestroy() {
         if (this.slideInterval) {
             clearInterval(this.slideInterval);
         }
+        this.scrollSubscription?.unsubscribe();
     }
 
     protected resetAndSetCategoryUrl(categoryPath: string | null): void {
@@ -118,13 +134,15 @@ export abstract class BaseProductList implements OnDestroy {
     }
 
 
-    @HostListener('window:scroll', [])
     onScroll(): void {
-        const SCROLL_THRESHOLD = 500;
+        if (this.isLoading() || !this.nextPageUrl) return;
+
+        const SCROLL_THRESHOLD = 1000;
         const currentScrollPosition = window.scrollY + window.innerHeight;
         const totalDocumentHeight = document.documentElement.scrollHeight;
 
         if (currentScrollPosition >= totalDocumentHeight - SCROLL_THRESHOLD) {
+            console.log('Threshold met - triggering next page load');
             this.loadNextPage();
         }
     }

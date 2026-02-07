@@ -7,11 +7,12 @@ import {
   switchMap,
   debounceTime,
   tap,
+  from,
   finalize,
   startWith,
   catchError
 } from 'rxjs';
-import { IProductSpecification, IPaginatedSpecificationList, IProductRecommendation } from '../interfaces/product';
+import { IProductSpecification, IPaginatedSpecificationList, IProductRecommendation, ISearchableProduct, IFirmwareProduct, ISearchResponse, ISoftProductRecommendation } from '../interfaces/product';
 import { ShippingMethod, TrackingDetail } from '../interfaces/shipping';
 import { LocationResponse } from '../interfaces/user';
 import { ExpensePayload, ICategory, IPayee, IExpense } from '../interfaces/expenses';
@@ -32,6 +33,9 @@ export class Master {
     this.refreshCart();
   }
 
+  public TEST_URL = `${this.API_BASE_URL}tests/tests/template/`
+  public SEARCH_URL = `${this.API_BASE_URL}products/`
+  public SOFT_URL = `${this.SEARCH_URL}public-softwares/`
   public CATALOG_URL = `${this.API_BASE_URL}products/public-catalog/`
   public FiltersUrl = `${this.CATALOG_URL}filters`;
   public salesUrl = `${this.API_BASE_URL}sales/`;
@@ -104,7 +108,6 @@ export class Master {
       });
   }
 
-
   getProducts(): Observable<IProductSpecification[]> {
     return this.http.get<IProductSpecification[]>(this.CATALOG_URL);
   }
@@ -118,8 +121,17 @@ export class Master {
     return this.http.get<IProductSpecification>(url);
   }
 
+  getSoftwareById(id: string): Observable<IFirmwareProduct> {
+    const url = `${this.SOFT_URL}${id}/`;
+    return this.http.get<IFirmwareProduct>(url);
+  }
+
   getSimilarProducts(id: string | number): Observable<IProductRecommendation[]> {
     return this.http.get<IProductRecommendation[]>(`${this.CATALOG_URL}${id}/recommendations/`);
+  }
+
+  getSimilarSoftware(id: string | number): Observable<ISoftProductRecommendation[]> {
+    return this.http.get<ISoftProductRecommendation[]>(`${this.SOFT_URL}${id}/recommendations/`);
   }
 
   getMoreYouMayLove(variantIds: string[]): Observable<IProductRecommendation[]> {
@@ -129,10 +141,10 @@ export class Master {
       });
   }
 
-  fetchProducts(query: string): Observable<IProductSpecification[]> {
-    const searchUrl = `${this.CATALOG_URL}?search=${encodeURIComponent(query)}`;
+  fetchProducts(query: string): Observable<ISearchableProduct[]> {
+    const searchUrl = `${this.SEARCH_URL}product-search/?search=${encodeURIComponent(query)}`;
 
-    return new Observable<IProductSpecification[]>((subscriber) => {
+    return new Observable<ISearchableProduct[]>((subscriber) => {
       let isCanceled = false;
 
       const fetchData = async () => {
@@ -145,7 +157,7 @@ export class Master {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
 
-          const apiResponse: IPaginatedSpecificationList = await response.json();
+          const apiResponse: ISearchResponse = await response.json();
 
           if (isCanceled) return;
 
@@ -170,6 +182,30 @@ export class Master {
         return of([]);
       })
     );
+  }
+
+  getTestBlueprint(specId: string): Observable<any> {
+    return from(fetch(`${this.TEST_URL}${specId}/`).then(res => res.json()));
+  }
+
+  // getTestBlueprint(specId: string): Observable<any> {
+  //   return from(
+  //     fetch(`${this.TEST_URL}${specId}/`, {
+  //       method: 'GET',
+  //       headers: { 'Accept': 'application/json' }
+  //     }).then(async (res) => {
+  //       if (!res.ok) throw new Error(`Server returned ${res.status}`);
+  //       return res.json();
+  //     })
+  //   );
+  // }
+
+  saveEvaluation(payload: any): Observable<any> {
+    return from(fetch(`${this.TEST_URL}test/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(res => res.json()));
   }
 
   getAvailableMethods(): Observable<ShippingMethod[]> {

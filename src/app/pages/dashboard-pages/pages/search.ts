@@ -37,36 +37,74 @@ import { RouterModule } from '@angular/router';
       </div>
 
       @if (isVisible() && !isLoading()) {
-          <div
-              class="absolute top-[calc(100%+8px)] left-0 w-full bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-gray-100 dark:border-slate-700 z-[110] overflow-hidden animate-fade-in"
-              (mousedown)="onMouseDown($event)">
+        <div class="absolute top-[calc(100%+8px)] left-0 w-full bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-slate-700 z-[110] overflow-hidden animate-fade-in">
 
-              <div class="flex flex-col max-h-[50vh] overflow-y-auto custom-scrollbar">
-                  @for (item of foundItems(); track item.id) {
-                      <a
-                          [routerLink]="['/dashboard/catalog', item.id]"
-                          (click)="hideInput(true)"
-                          class="p-5 flex items-center hover:bg-primary/5 border-b border-gray-100 dark:border-slate-700 last:border-none no-underline transition-colors group"
-                      >
-                          <i class="pi pi-search mr-4 text-primary opacity-60 group-hover:opacity-100 transition-opacity text-lg"></i>
-                          <div class="flex flex-col">
-                              <span class="font-semibold text-slate-700 dark:text-slate-200 text-base">
-                                  {{ item.parent_product_name }}
-                              </span>
-                              <span class="text-xs text-slate-400 font-mono mt-0.5">Model: {{ item.model }}</span>
-                          </div>
-                      </a>
-                  } @empty {
-                      <div class="p-10 text-center">
-                          <i class="pi pi-exclamation-circle text-3xl text-slate-300 mb-3 block"></i>
-                          <div class="text-slate-500 italic text-lg">
-                              No matches for "<span class="font-semibold text-primary">{{ searchControl.value }}</span>"
-                          </div>
-                      </div>
-                  }
-              </div>
-          </div>
-      }
+            <div class="flex flex-col max-h-[60vh] overflow-y-auto custom-scrollbar">
+                @for (product of foundItems(); track product.id) {
+
+                    @for (spec of product.specifications; track spec.id) {
+                        <a [routerLink]="['/dashboard/catalog', spec.id]"
+                           (click)="hideInput(true)"
+                           class="p-4 flex items-center hover:bg-blue-50/50 dark:hover:bg-blue-900/10 border-b border-gray-50 dark:border-slate-700/50 no-underline transition-all group">
+
+                            <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
+                                <i class="pi pi-desktop text-blue-600 dark:text-blue-400"></i>
+                            </div>
+
+                            <div class="flex flex-col flex-1">
+                                <div class="flex justify-between items-start">
+                                    <span class="font-bold text-slate-700 dark:text-slate-200 text-sm">
+                                        {{ product.name }}
+                                    </span>
+                                    <span class="text-[10px] font-black uppercase tracking-tighter text-blue-500 bg-blue-50 dark:bg-blue-900/20 px-2 py-0.5 rounded">Hardware</span>
+                                </div>
+                                <span class="text-xs text-slate-400 font-mono">Model: {{ spec.model }}</span>
+                            </div>
+                        </a>
+                    }
+
+                    @for (fw of product.firmwares; track fw.id) {
+                        <a [routerLink]="['/dashboard/firmware', fw.id]"
+                           (click)="hideInput(true)"
+                           class="p-4 flex items-center hover:bg-emerald-50/50 dark:hover:bg-emerald-900/10 border-b border-gray-50 dark:border-slate-700/50 no-underline transition-all group">
+
+                            <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
+                                <i class="pi pi-file-export text-emerald-600 dark:text-emerald-400"></i>
+                            </div>
+
+                            <div class="flex flex-col flex-1">
+                                <div class="flex justify-between items-start">
+                                    <span class="font-bold text-slate-700 dark:text-slate-200 text-sm">
+                                        {{ fw.board_number }}
+                                    </span>
+                                    <span class="text-[10px] font-black uppercase tracking-tighter text-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-0.5 rounded">Firmware</span>
+                                </div>
+                                <span class="text-xs text-slate-400 font-mono">{{ fw.software_type_display }} • {{ fw.panel_model || 'Universal' }}</span>
+                            </div>
+                        </a>
+                    }
+
+                } @empty {
+                    <div class="p-10 text-center">
+                        <div class="w-16 h-16 bg-slate-50 dark:bg-slate-700/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="pi pi-search-plus text-2xl text-slate-300"></i>
+                        </div>
+                        <div class="text-slate-500 italic text-base">
+                            No hardware or firmware matches for
+                            <span class="block font-bold text-primary not-italic mt-1">"{{ searchControl.value }}"</span>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="bg-slate-50 dark:bg-slate-900/50 p-3 px-5 border-t border-gray-100 dark:border-slate-700">
+                 <p class="text-[10px] text-slate-400 m-0">
+                    <i class="pi pi-info-circle mr-1"></i>
+                    Searching by Board Number, Model, or Panel Model...
+                 </p>
+            </div>
+        </div>
+    }
     </div>`
 })
 export class Search {

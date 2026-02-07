@@ -35,7 +35,7 @@ import { FormsModule } from '@angular/forms';
     </div>
     <h3 class="font-bold text-xl mb-2">WhatsApp Us</h3>
     <p class="text-emerald-100 text-sm mb-4">Fastest way to send us photos of your TV parts for a repair quote.</p>
-    <span class="font-mono font-bold text-lg">0742 077 705</span>
+    <span class="font-mono font-bold text-lg">0742 077 805</span>
     </a>
 
     <div class="p-8 rounded-[2rem] bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 shadow-xl hover:-translate-y-2 transition-transform">
@@ -49,7 +49,7 @@ import { FormsModule } from '@angular/forms';
     <i class="pi pi-phone text-3xl text-blue-500 mb-6 block"></i>
     <h3 class="font-bold text-xl mb-2 dark:text-white">Call / Message</h3>
     <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Reach out directly for urgent technical support or orders.</p>
-    <span class="text-slate-900 dark:text-white font-bold text-lg">0742 077 705</span>
+    <span class="text-slate-900 dark:text-white font-bold text-lg">0742 077 805</span>
     </div>
     </div>
 
@@ -100,7 +100,7 @@ import { FormsModule } from '@angular/forms';
       </div>
       <div class="flex flex-col gap-2">
         <label class="text-xs font-black uppercase tracking-widest text-slate-400">Phone Number</label>
-        <input type="text" pInputText class="!rounded-xl !p-4 !bg-slate-50 dark:!bg-slate-800 !border-none" placeholder="0742 077 705">
+        <input type="text" pInputText class="!rounded-xl !p-4 !bg-slate-50 dark:!bg-slate-800 !border-none" placeholder="0742 077 805">
       </div>
     </div>
 

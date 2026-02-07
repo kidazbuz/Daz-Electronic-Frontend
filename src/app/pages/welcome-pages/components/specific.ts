@@ -99,7 +99,7 @@ declare const AOS: any;
                 <div class="flex items-center justify-center p-4 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-100/50 dark:border-slate-800">
 
                   <button
-                          class="flex items-center gap-2 px-4 py-2 text-slate-400 hover:text-slate-900 dark:hover:text-white font-bold text-xs uppercase tracking-[0.2em] transition-all duration-300 group">
+                          (click)="showReviews()" class="flex items-center gap-2 px-4 py-2 text-slate-400 hover:text-slate-900 dark:hover:text-white font-bold text-xs uppercase tracking-[0.2em] transition-all duration-300 group">
 
                     <i class="pi pi-external-link text-[10px] transition-transform group-hover:scale-110"></i>
 
@@ -176,7 +176,7 @@ declare const AOS: any;
                     <i class="pi pi-shopping-bag"></i> Add to Cart
                   </button>
 
-                  <button class="w-12 h-12 flex items-center justify-center border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-400 hover:text-rose-500 transition-all">
+                  <button *ngIf="isAuthenticated()" class="w-12 h-12 flex items-center justify-center border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-400 hover:text-rose-500 transition-all">
                     <i class="pi pi-heart-fill text-xs"></i>
                   </button>
                 </div>
@@ -551,6 +551,55 @@ declare const AOS: any;
   </p-tabs>
 </p-dialog>
 
+<p-dialog *ngIf="product"
+  header="Customer Feedback"
+  [(visible)]="displayReviews"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw', '641px': '90vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="dark:bg-slate-900"
+  maskStyleClass="backdrop-blur-sm">
+
+  <div class="p-4 max-w-4xl">
+    @if (product.user_reviews.length === 0) {
+        <div class="flex flex-col items-center py-10 text-slate-400">
+            <i class="pi pi-comments text-4xl mb-2"></i>
+            <p>Be the first to review this product!</p>
+        </div>
+    } @else {
+        @for (review of product.user_reviews; track review.id) {
+            <div class="mb-8 pb-6 border-b border-slate-100 dark:border-slate-800 last:border-0">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-sm font-bold text-primary overflow-hidden border border-slate-200 dark:border-slate-800">
+                      @if (review.profile_picture) {
+                          <img [src]="review.profile_picture" [alt]="review.user" class="w-full h-full object-cover" />
+                      } @else {
+                          {{ review.user.charAt(0) }}
+                      }
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-bold text-sm">{{ review.user }}</span>
+                        <span class="text-xs text-slate-400">{{ review.created_at | date:'medium' }}</span>
+                    </div>
+                </div>
+
+                <div class="flex text-orange-400 text-xs mb-3">
+                    @for (star of [1,2,3,4,5]; track $index) {
+                        <i [class]="star <= review.rating ? 'pi pi-star-fill' : 'pi pi-star'" class="mr-1"></i>
+                    }
+                </div>
+
+                <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed m-0 italic">
+                    "{{ review.comment }}"
+                </p>
+            </div>
+        }
+    }
+  </div>
+</p-dialog>
+
 
     `,
 
@@ -561,6 +610,7 @@ export class Specific implements OnInit, AfterViewInit, OnDestroy {
   relatedProducts: IProductRecommendation[] = [];
   isRecsLoading: boolean = false;
   isLoading = true;
+  displayReviews: boolean = false;
   error: string | null = null;
   private routeSub: Subscription | undefined;
 
@@ -746,6 +796,10 @@ export class Specific implements OnInit, AfterViewInit, OnDestroy {
       }
 
       this.showMediaDialog = true;
+    }
+
+    showReviews() {
+      this.displayReviews = true;
     }
 
     redirectToNotAvailable(){

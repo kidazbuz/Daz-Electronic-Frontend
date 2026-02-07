@@ -65,6 +65,14 @@ export const ROLE_MENU_MAP: { [key: string]: any[] } = {
                 { label: 'Stock Levels', icon: 'pi pi-chart-line', routerLink: ['/dashboard/stock'] }
             ]
         },
+        {
+            label: 'Hardware T&E: TV Components',
+            items: [
+                { label: 'Test and Evaluation', icon: 'pi pi-fw pi-check-square', routerLink: ['/dashboard/harware/test'] },
+                { label: 'Test Summary', icon: 'pi pi-chart-bar', routerLink: ['/dashboard/test/summary'] }
+            ]
+        },
+
         // {
         //     label: 'Fulfillment & Shipping',
         //     items: [

@@ -79,10 +79,10 @@ import { User } from '../../shared/interfaces/user';
      [src]="user?.profile_picture?.image"
      class="w-32 h-32 rounded-full border-4 border-white dark:border-surface-700 shadow-md object-cover mb-4" />
 
-<div *ngIf="!user?.profile_picture?.image"
-     class="w-32 h-32 rounded-full border-4 border-white dark:border-surface-700 shadow-md mb-4 flex items-center justify-center bg-primary-500 text-white text-4xl font-bold tracking-tighter">
-     {{ userInitials }}
-</div>
+    <div *ngIf="!user?.profile_picture?.image"
+         class="w-32 h-32 rounded-full border-4 border-white dark:border-surface-700 shadow-md mb-4 flex items-center justify-center bg-primary-500 text-white text-4xl font-bold tracking-tighter">
+         {{ userInitials }}
+    </div>
             </div>
 
             <button class="absolute bottom-1 right-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 w-8 h-8 rounded-full flex items-center justify-center shadow-md hover:bg-slate-50 transition-colors">

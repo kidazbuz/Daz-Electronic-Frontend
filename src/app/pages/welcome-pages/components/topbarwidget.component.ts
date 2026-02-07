@@ -10,7 +10,7 @@ import {
   ElementRef,
   Injectable
 } from '@angular/core';
-import { RouterModule, Router } from '@angular/router'; // Added Router for navigation
+import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -40,8 +40,8 @@ import { Master } from '../../../shared/services/master';
 
     <div class="flex items-center gap-2 md:gap-3 flex-shrink-0 cursor-pointer group" routerLink="/">
 
-
       <span class="text-xl md:text-2xl font-extrabold tracking-tight text-slate-800 dark:text-white leading-none whitespace-nowrap pt-0.5">
+
           <div class="color-adaptive-main w-9 h-9 md:w-11 md:h-11 flex-shrink-0">{{ brand }}</div>
 
       </span>
@@ -66,36 +66,62 @@ import { Master } from '../../../shared/services/master';
       </div>
 
       @if (isVisible() && !isLoading()) {
-        <div
-          class="absolute top-full left-0 mt-2 w-full bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-gray-100 dark:border-slate-700 z-[110] overflow-hidden animate-fade-in"
-          (mousedown)="onMouseDown($event)">
+      <div
+        class="absolute top-full left-0 mt-2 w-full bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-gray-100 dark:border-slate-700 z-[110] overflow-hidden animate-fade-in"
+        (mousedown)="onMouseDown($event)">
 
-          <div class="flex flex-col max-h-[50vh] overflow-y-auto">
-            @for (item of foundItems(); track item.id) {
+        <div class="flex flex-col max-h-[50vh] overflow-y-auto">
+          @for (product of foundItems(); track product.id) {
+
+            @for (spec of product.specifications; track spec.id) {
               <a
-                [routerLink]="['/der/product', item.id]"
+                [routerLink]="['/der/product', spec.id]"
                 (click)="hideInput(true)"
-                class="p-4 flex items-center hover:bg-primary/5 border-b border-gray-100 dark:border-slate-700 last:border-none no-underline transition-colors group"
+                class="p-4 pl-8 flex items-center hover:bg-primary/5 border-b border-gray-50 dark:border-slate-700/50 last:border-none no-underline transition-colors group"
               >
-                <i class="pi pi-search mr-3 text-primary opacity-60 group-hover:opacity-100 transition-opacity"></i>
+                <i class="pi pi-box mr-3 text-primary opacity-50 group-hover:opacity-100 transition-opacity"></i>
                 <div class="flex flex-col">
-                  <span class="font-medium text-slate-700 dark:text-slate-200">
-                    {{ item.parent_product_name }}
+                  <span class="font-medium text-slate-700 dark:text-slate-200 text-sm">
+                    {{ spec.parent_product_name }}
                   </span>
-                  <span class="text-xs text-slate-400 font-mono">Model: {{ item.model }}</span>
+                  <span class="text-[11px] text-slate-400 font-mono">
+                    Model: {{ spec.model }} • SKU: {{ spec.sku }}
+                  </span>
                 </div>
+                <span class="ml-auto text-xs font-bold text-primary">{{ spec.discounted_price }}</span>
               </a>
-            } @empty {
-              <div class="p-8 text-center">
-                <i class="pi pi-exclamation-circle text-2xl text-slate-300 mb-2 block"></i>
-                <div class="text-slate-500 italic">
-                  No matches for "<span class="font-semibold text-primary">{{ searchControl.value }}</span>"
-                </div>
-              </div>
             }
-          </div>
+
+            @for (fw of product.firmwares; track fw.id) {
+              <a
+                [routerLink]="['/der/software', fw.id]"
+                (click)="hideInput(true)"
+                class="p-4 pl-8 flex items-center hover:bg-blue-500/5 border-b border-gray-50 dark:border-slate-700/50 last:border-none no-underline transition-colors group"
+              >
+                <i class="pi pi-file-export mr-3 text-blue-500 opacity-50 group-hover:opacity-100 transition-opacity"></i>
+                <div class="flex flex-col">
+                  <span class="font-medium text-slate-700 dark:text-slate-200 text-sm">
+                    Firmware: {{ fw.board_number }}
+                  </span>
+                  <span class="text-[11px] text-slate-400 font-mono">
+                    {{ fw.software_type_display }} • Panel: {{ fw.panel_model }}
+                  </span>
+                </div>
+                <span class="ml-auto text-[10px] text-blue-500 font-semibold">{{ fw.size_mb }} MB</span>
+              </a>
+            }
+
+          } @empty {
+            <div class="p-8 text-center">
+              <i class="pi pi-exclamation-circle text-2xl text-slate-300 mb-2 block"></i>
+              <div class="text-slate-500 italic">
+                No matches for "<span class="font-semibold text-primary">{{ searchControl.value }}</span>"
+              </div>
+            </div>
+          }
         </div>
-      }
+      </div>
+    }
     </div>
 
     <div class="flex items-center gap-2 md:gap-4">
@@ -150,7 +176,7 @@ import { Master } from '../../../shared/services/master';
       <input
         [formControl]="searchControl"
         type="text"
-        placeholder="What are you looking for?"
+        placeholder="Search for models, board numbers..."
         class="w-full pl-11 pr-4 py-3 rounded-lg border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 outline-none focus:ring-2 focus:ring-primary"
         autofocus
       >
@@ -159,22 +185,44 @@ import { Master } from '../../../shared/services/master';
     @if (isVisible() && !isLoading()) {
       <div class="mt-2 max-h-[60vh] overflow-y-auto bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-gray-100 dark:border-slate-700 overflow-hidden">
         <div class="flex flex-col">
-          @for (item of foundItems(); track item.id) {
-            <a
-              [routerLink]="['/der/product', item.id]"
-              (click)="hideInput(true)"
-              class="p-4 flex items-center hover:bg-primary/5 border-b border-gray-100 dark:border-slate-700 last:border-none no-underline transition-colors active:bg-gray-100"
-            >
-              <i class="pi pi-search mr-3 text-primary opacity-60"></i>
-              <div class="flex flex-col">
-                <span class="font-medium text-slate-700 dark:text-slate-200 text-sm">
-                  {{ item.parent_product_name }}
-                </span>
-                <span class="text-[10px] text-slate-400 font-mono uppercase tracking-tighter">
-                  Model: {{ item.model }}
-                </span>
-              </div>
-            </a>
+          @for (product of foundItems(); track product.id) {
+
+            @for (spec of product.specifications; track spec.id) {
+              <a
+                [routerLink]="['/der/product', spec.id]"
+                (click)="hideInput(true)"
+                class="pl-8 pr-4 py-3 flex items-center hover:bg-primary/5 border-b border-gray-50 dark:border-slate-700/50 last:border-none no-underline transition-colors active:bg-gray-100"
+              >
+                <i class="pi pi-box mr-3 text-[12px] text-slate-400"></i>
+                <div class="flex flex-col">
+                  <span class="text-sm text-slate-700 dark:text-slate-200">
+                    Model: {{ spec.model }}
+                  </span>
+                  <span class="text-[10px] text-slate-400 font-mono">
+                    {{ spec.screen_size_name }}" {{ spec.resolution_name }} • {{ spec.brand_name }}
+                  </span>
+                </div>
+              </a>
+            }
+
+            @for (fw of product.firmwares; track fw.id) {
+              <a
+                [routerLink]="['/der/software', fw.id]"
+                (click)="hideInput(true)"
+                class="pl-8 pr-4 py-3 flex items-center hover:bg-primary/5 border-b border-gray-50 dark:border-slate-700/50 last:border-none no-underline transition-colors active:bg-gray-100"
+              >
+                <i class="pi pi-file-export mr-3 text-[12px] text-blue-500"></i>
+                <div class="flex flex-col">
+                  <span class="text-sm text-slate-700 dark:text-slate-200">
+                    Firmware: {{ fw.board_number }}
+                  </span>
+                  <span class="text-[10px] text-slate-400 font-mono">
+                    {{ fw.software_type_display }} • Panel: {{ fw.panel_model }}
+                  </span>
+                </div>
+              </a>
+            }
+
           } @empty {
             <div class="p-6 text-center">
               <div class="text-slate-500 text-sm italic">
@@ -194,13 +242,19 @@ import { Master } from '../../../shared/services/master';
     <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" (click)="toggleMenu()"></div>
 
     <aside class="absolute inset-y-0 left-0 w-[280px] bg-white dark:bg-slate-900 shadow-2xl flex flex-col animate-slide-right">
-      <div class="p-6 border-b border-gray-100 dark:border-slate-800 flex justify-between items-center bg-gray-50 dark:bg-slate-800/50">
-      <div class="flex items-center gap-2">
-         <div class="color-adaptive-small h-7 w-7 flex-shrink-0"></div>
-         <span class="font-bold text-slate-800 dark:text-white text-lg tracking-tight">{{ brand }}</span>
+    <div class="p-6 border-b border-gray-100 dark:border-slate-800 flex justify-between items-center bg-gray-50 dark:bg-slate-800/50">
+      <div class="flex items-center gap-3">
+        <div class="color-adaptive-small h-10 w-10 flex-shrink-0"></div>
+
+        <span class="font-bold text-slate-800 dark:text-white text-lg tracking-tight leading-none">
+          {{ brand }}
+        </span>
       </div>
-        <button (click)="toggleMenu()" class="p-2"><i class="pi pi-times"></i></button>
-      </div>
+
+      <button (click)="toggleMenu()" class="p-2">
+        <i class="pi pi-times"></i>
+      </button>
+    </div>
 
       <div class="flex-1 overflow-y-auto py-4">
         <div class="px-4 mb-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Navigation</div>
@@ -229,7 +283,6 @@ export class TopbarWidget implements OnInit, AfterViewInit, OnDestroy {
   private searchService = inject(Master);
   public brand = 'Daz Electronics'
 
-  // --- Header Data ---
   readonly primaryNavLinks: NavLink[] = [
     { label: 'Home', link: '/' },
     { label: 'TV Screens', link: '/der/screens' },
@@ -248,13 +301,11 @@ export class TopbarWidget implements OnInit, AfterViewInit, OnDestroy {
     { label: 'Cart', link: '/der/cart' },
   ];
 
-  // --- Header State Signals ---
   isMobileMenuOpen = signal(false);
   isMobileSearchVisible = signal(false);
   private readonly lgBreakpoint = 1024;
   cartCount = signal(0);
 
-  // --- Search Logic Properties ---
   searchControl = new FormControl('', { nonNullable: true });
   isVisible = signal(false);
   isLoading = signal(false);
@@ -268,7 +319,6 @@ export class TopbarWidget implements OnInit, AfterViewInit, OnDestroy {
   desktopSearchInput = viewChild<ElementRef<HTMLInputElement>>('desktopSearchInput');
   private mouseDownOnElement = false;
 
-  // --- RxJS Pipeline ---
   private searchResults$ = this.searchControl.valueChanges.pipe(
     startWith(this.searchControl.value),
     debounceTime(300),
@@ -294,10 +344,9 @@ export class TopbarWidget implements OnInit, AfterViewInit, OnDestroy {
   );
 
   foundItems = toSignal(this.searchResults$, { initialValue: [] });
-  // ----------------------------------------------------------------------
 
   ngOnInit() {
-    // Initialization logic
+
   }
 
   ngAfterViewInit() {
@@ -311,17 +360,11 @@ export class TopbarWidget implements OnInit, AfterViewInit, OnDestroy {
     window.removeEventListener('resize', this.updateSearchPosition.bind(this));
   }
 
-  // ----------------------------------------------------
-  // HELPER METHODS
-  // ----------------------------------------------------
 
   isDesktop(): boolean {
     return typeof window !== 'undefined' ? window.innerWidth >= this.lgBreakpoint : false;
   }
 
-  // ----------------------------------------------------
-  // HEADER HANDLERS (Menu/Search Bar Visibility)
-  // ----------------------------------------------------
 
   toggleMenu(): void {
     this.isMobileMenuOpen.update(current => {
@@ -337,7 +380,7 @@ export class TopbarWidget implements OnInit, AfterViewInit, OnDestroy {
       if (!current) {
         this.isMobileMenuOpen.set(false);
       } else {
-        // If closing the mobile bar, clear input and hide results
+
         this.searchControl.setValue('');
         this.hideInput(true);
       }
@@ -358,9 +401,6 @@ export class TopbarWidget implements OnInit, AfterViewInit, OnDestroy {
     this.updateSearchPosition();
   }
 
-  // ----------------------------------------------------
-  // SEARCH HANDLERS (Focus, Blur, Position)
-  // ----------------------------------------------------
 
   updateSearchPosition() {
     if (!this.isDesktop()) return;
@@ -387,15 +427,11 @@ export class TopbarWidget implements OnInit, AfterViewInit, OnDestroy {
     event.preventDefault();
     const term = this.searchControl.value;
     if (term.trim().length > 0) {
-        // Navigate to the full search results page
         this.router.navigate(['/search'], { queryParams: { q: term.trim() } });
     }
     this.hideInput(true);
   }
 
-  /**
-    * Hides the search results dropdown and clears state.
-    */
   hideInput(isNavigationClick = false) {
     if (isNavigationClick) {
       this.isVisible.set(false);

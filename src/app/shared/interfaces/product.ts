@@ -57,6 +57,42 @@ export interface IProductSpecification {
   user_reviews: UserReview[];
 }
 
+export interface IFirmwareProduct {
+  id: string;
+  name: string;
+  version: string;
+  description: string;
+  board_number: string;
+  panel_model: string;
+  brand_name: string;
+  resolution_name: string;
+  software_type_display: string;
+  size_mb: string;
+  category_name: 'software';
+  price: string;
+  user_reviews: UserReview[];
+  images: IImage[];
+  videos: IVideo[];
+}
+
+export interface ISearchableProduct {
+  id: string;
+  name: string;
+  category_name: string;
+  description: string;
+  specifications: IProductSpecification[];
+  firmwares: IFirmwareProduct[];
+}
+
+
+export interface ISearchResponse {
+  results: ISearchableProduct[];
+  count?: number;
+  next?: string | null;
+  previous?: string | null;
+}
+
+
 export interface IPaginatedSpecificationList {
     count: number;
     next: string | null;
@@ -92,6 +128,18 @@ export interface IProductRecommendation {
   thumbnail: string | null;
   screen_size_name: string;
   resolution_name: string;
+}
+
+export interface ISoftProductRecommendation {
+  id: string;
+  brand_name: string;
+  board_number: string;
+  panel_model: string | null;
+  software_type_display: string;
+  price: string | number;
+  thumbnail: string | null;
+  size_mb: string | number;
+  category_name?: string;
 }
 
 export interface ProductMedia {

@@ -18,7 +18,7 @@ export const appRoutes: Routes = [
       component: AppLayout,
       canActivate: [authenticityGuard],
       data: {
-        allowedRoles: ['System Administrator', 'Chief Executive Officer (CEO)', 'Sales Representative', 'Customer']
+        allowedRoles: ['System Administrator', 'Chief Executive Officer (CEO)', 'Sales Representative', 'Customer', 'Manager']
       },
       loadChildren: () => import('./app/pages/dashboard-pages/dashboard.routes')
     },

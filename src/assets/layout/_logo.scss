@@ -1,31 +1,12 @@
 .color-adaptive-main {
-  width: 15rem;
-  height: 15rem;
+  width: 6rem;
+  height: 6rem;
+
   margin-left: auto;
   margin-right: auto;
   display: inline-block;
   background-color: var(--p-primary-color);
 
-  -webkit-mask-image: url("/images/Daz.svg");
-  mask-image: url("/images/Daz.svg");
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  mask-position: center;
-
-  transition: transform 0.3s ease, background-color 0.4s ease;
-}
-
-.group:hover .color-adaptive-logo {
-  transform: scale(1.05);
-}
-
-
-.color-adaptive-small {
-
-  display: inline-block;
-  background-color: var(--p-primary-color);
   -webkit-mask-image: url("/images/Daz-only-D.svg");
   mask-image: url("/images/Daz-only-D.svg");
   -webkit-mask-repeat: no-repeat;
@@ -33,11 +14,44 @@
   -webkit-mask-size: contain;
   mask-size: contain;
   mask-position: center;
+
   transition: transform 0.3s ease, background-color 0.4s ease;
 }
 
-.group:hover .color-adaptive-logo {
+
+@media (min-width: 768px) {
+  .color-adaptive-main {
+
+    width: 15rem;
+    height: 15rem;
+
+    -webkit-mask-image: url("/images/Daz.svg");
+    mask-image: url("/images/Daz.svg");
+  }
+}
+
+.group:hover .color-adaptive-main {
   transform: scale(1.05);
+}
+
+
+.color-adaptive-small {
+  display: inline-block;
+  background-color: var(--p-primary-color);
+
+  -webkit-mask-image: url("/images/Daz-only-D.svg");
+  mask-image: url("/images/Daz-only-D.svg");
+  mask-repeat: no-repeat;
+  mask-size: 150%; 
+  mask-position: center;
+
+  transform: translateY(-1px);
+
+  transition: transform 0.3s ease;
+}
+
+.group:hover .color-adaptive-small {
+  transform: scale(1.45);
 }
 
 
